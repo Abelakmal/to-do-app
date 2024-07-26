@@ -1,6 +1,7 @@
 export interface IChecklist {
   id: number;
   name: string;
+  userId: number;
 }
 
 export interface IChecklistDetail {
@@ -14,4 +15,5 @@ export interface IItems {
   description: string;
   status: boolean;
   checklistId: number;
+  userId: number;
 }

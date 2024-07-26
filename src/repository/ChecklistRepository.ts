@@ -8,31 +8,42 @@ export class ChecklistRepository {
     this.prisma = new PrismaClient();
   }
 
-  public async getChecklist(): Promise<IChecklist[]> {
+  public async getChecklist(user: number): Promise<IChecklist[]> {
     try {
-      const data = await this.prisma.checklist.findMany({});
+      const data = await this.prisma.checklist.findMany({
+        where: { userId: user },
+      });
       return data;
     } catch (error) {
       throw error;
     }
   }
 
-  public async createChecklist(checklist: IChecklist): Promise<void> {
+  public async createChecklist(
+    user: number,
+    checklist: IChecklist
+  ): Promise<void> {
     try {
       await this.prisma.checklist.create({
-        data: checklist,
+        data: {
+          ...checklist,
+          userId: user,
+        },
       });
     } catch (error) {
       throw error;
     }
   }
 
-  public async createItem(item:IItems): Promise<void> {
+  public async createItem(user: number,id:number, item: IItems): Promise<void> {
     try {
       await this.prisma.item.create({
-          data: item
+        data: {
+          ...item,
+          userId: user,
+          checklistId: id
+        },
       });
-
     } catch (error) {
       throw error;
     }

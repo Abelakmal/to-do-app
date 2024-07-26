@@ -15,6 +15,7 @@ export class ItemRepository {
           id,
         },
       });
+      
       return result;
     } catch (error) {
       throw error;

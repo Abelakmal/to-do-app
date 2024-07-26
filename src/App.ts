@@ -11,6 +11,7 @@ import { TestRouter } from "./routers/TestRouter";
 import { UserRouter } from "./routers/UserRouter";
 import { ChecklistRouter } from "./routers/ChecklistRouter";
 import { ItemsRouter } from "./routers/ItemsRouter";
+import { ApiError } from "./error/ApiError";
 
 export class App {
   private app: Express;
@@ -20,6 +21,7 @@ export class App {
     this.configure();
     this.routes();
     this.handleError();
+    this.handleNotFound();
   }
 
   private configure(): void {
@@ -35,24 +37,28 @@ export class App {
     this.app.use("/api/test", router.getRouter());
     this.app.use("/api/user", userRouter.getRouter());
     this.app.use("/api/checklist", checklistRouter.getRouter());
-    this.app.use("/api/items", checklistRouter.getRouter());
+    this.app.use("/api/items", itemRouter.getRouter());
   }
-  private handleError() {
-    this.app.use((req: Request, res: Response, next: NextFunction): void => {
+  private handleNotFound(): void {
+    this.app.use((req: Request, res: Response, next: NextFunction) => {
       if (req.path.includes("/api/")) {
-        res.status(404).send("Not found");
+        res.status(404).json({ error: "Not found" });
       } else {
         next();
       }
     });
+  }
 
+  private handleError() {
     this.app.use(
       (err: Error, req: Request, res: Response, next: NextFunction) => {
-        if (req.path.includes("/api/")) {
-          console.error("Error : ", err.stack);
-          res.status(500).send(err.message);
+        if (err instanceof ApiError) {
+          res.status(err.statusCode).json({
+            error: err.message,
+          });
         } else {
-          next();
+          console.error("Error: ", err.stack);
+          res.status(500).json({ error: err.message });
         }
       }
     );

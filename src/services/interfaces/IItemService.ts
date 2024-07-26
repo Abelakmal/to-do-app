@@ -1,8 +1,12 @@
 import { IItems } from "../../types/checklist.type";
 
 export interface IItemService {
-  getItemById(id: number): Promise<IItems>;
-  updateService(id: number, data: IItems): Promise<IItems>;
-  deleteItemService(id: number): Promise<void>;
-  updateStatusService(id: number, status: boolean): Promise<IItems>;
+  getItemById(user: number, id: number): Promise<IItems>;
+  updateService(user: number, id: number, data: IItems): Promise<IItems>;
+  deleteItemService(user: number, id: number): Promise<void>;
+  updateStatusService(
+    user: number,
+    id: number,
+    status: boolean
+  ): Promise<IItems>;
 }
