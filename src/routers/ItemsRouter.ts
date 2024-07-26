@@ -10,30 +10,36 @@ export class ItemsRouter {
   constructor() {
     this.router = Router();
     this.itemsController = new ItemsController();
-    // this.initializeRouters();
+    this.initializeRouters();
   }
 
-//   private initializeRouters(): void {
-//     this.router.get(
-//       "/",
-//       verifyToken,
-//       this.itemsController.getItems.bind(this.itemsController)
-//     );
+  private initializeRouters(): void {
+    this.router.patch(
+      "/:id/status",
+      verifyToken,
+      this.itemsController.updateStatus.bind(this.itemsController)
+    );
 
-//     this.router.get(
-//         "/:id",
-//         verifyToken,
-//         this.itemsController.getItemsById.bind(this.itemsController)
-//       );
+    this.router.put(
+        "/:id",
+        verifyToken,
+        this.itemsController.updateItem.bind(this.itemsController)
+      );
+
+    this.router.get(
+        "/:id",
+        verifyToken,
+        this.itemsController.getItemsById.bind(this.itemsController)
+      );
 
 
 
-//     this.router.delete(
-//       "/:id",
-//       verifyToken,
-//       this.itemsController.deleteItems.bind(this.itemsController)
-//     );
-//   }
+    this.router.delete(
+      "/:id",
+      verifyToken,
+      this.itemsController.deleteItem.bind(this.itemsController)
+    );
+  }
 
   public getRouter(): Router {
     return this.router;
