@@ -8,6 +8,9 @@ import express, {
 import { PORT } from "./helper/config";
 import cors from "cors";
 import { TestRouter } from "./routers/TestRouter";
+import { UserRouter } from "./routers/UserRouter";
+import { ChecklistRouter } from "./routers/ChecklistRouter";
+import { ItemsRouter } from "./routers/ItemsRouter";
 
 export class App {
   private app: Express;
@@ -26,9 +29,14 @@ export class App {
 
   private routes(): void {
     const router = new TestRouter();
+    const userRouter = new UserRouter();
+    const itemRouter = new ItemsRouter();
+    const checklistRouter = new ChecklistRouter();
     this.app.use("/api/test", router.getRouter());
+    this.app.use("/api/user", userRouter.getRouter());
+    this.app.use("/api/checklist", checklistRouter.getRouter());
+    this.app.use("/api/items", checklistRouter.getRouter());
   }
-
   private handleError() {
     this.app.use((req: Request, res: Response, next: NextFunction): void => {
       if (req.path.includes("/api/")) {
